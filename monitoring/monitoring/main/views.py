@@ -13,3 +13,6 @@ def register_page_view(request):
 
 def login_page_view(requset):
     return render(requset, 'login.html')
+
+def dashboard_page_view(requset):
+    return render(requset, 'dashboard.html')

@@ -18,25 +18,21 @@
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username" placeholder="Ім'я користувача" required>
                                     <label for="username">Ім'я користувача</label>
-                                    {% comment %} For Django forms: {{ form.username }} {% endcomment %}
                                 </div>
 
                                 <div class="form-floating mb-3">
                                     <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
                                     <label for="email">Email адреса</label>
-                                    {% comment %} For Django forms: {{ form.email }} {% endcomment %}
                                 </div>
 
                                 <div class="form-floating mb-3">
                                     <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
                                     <label for="password">Пароль</label>
-                                    {% comment %} For Django forms: {{ form.password }} {% endcomment %}
                                 </div>
 
                                 <div class="form-floating mb-3">
                                     <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Підтвердіть пароль" required>
                                     <label for="password_confirm">Підтвердіть пароль</label>
-                                    {% comment %} For Django forms: {{ form.password_confirm }} {% endcomment %}
                                 </div>
 
                                 {% if form.errors %}

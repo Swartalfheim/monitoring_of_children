@@ -6,26 +6,66 @@
 {% endblock styles %}
 
 {% block content %}
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5">
-                <div class="card shadow-sm p-4">
-                    <h2 class="card-title text-center fw-bold mb-4 text-primary">Увійти до KidStats</h2>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Ім'я користувача</label>
-                            <input type="text" class="form-control" name="username" required>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
+                    <div class="card shadow-lg border-0 rounded-3 auth-card mx-auto">
+                        <div class="card-body p-4 p-sm-5">
+                            <h2 class="card-title text-center fw-bold mb-4 text-primary">Вхід до KidStats</h2>
+                            <form method="post" action="{% url 'login' %}">
+                                {% csrf_token %}
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Ім'я користувача або Email" required>
+                                    <label for="username">Ім'я користувача або Email</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
+                                    <label for="password">Пароль</label>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="rememberMe" name="remember_me">
+                                        <label class="form-check-label" for="rememberMe">
+                                            Запам'ятати мене
+                                        </label>
+                                    </div>
+                                    <a href="#" class="small text-decoration-none">Забули пароль?</a>
+                                </div>
+
+                                {% if form.errors %}
+                                    <div class="alert alert-danger mt-3" role="alert">
+                                        Будь ласка, виправте помилки нижче.
+                                        {{ form.non_field_errors }}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <p class="mb-0">{{ field.label }}: {{ error }}</p>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }} mt-3" role="alert">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+
+                                <div class="d-grid my-4">
+                                    <button class="btn btn-primary btn-lg fw-bold rounded-pill" type="submit">Увійти</button>
+                                </div>
+
+                                <div class="text-center">
+                                    <p class="small mb-0">Немає облікового запису? <a href="{% url 'register' %}" class="text-decoration-none fw-medium">Зареєструватися</a></p>
+                                </div>
+                            </form>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Пароль</label>
-                            <input type="password" class="form-control" name="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Увійти</button>
-                        <p class="text-center mt-3">Ще не маєте облікового запису? <a href="{% url 'register' %}">Зареєструватися</a></p>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock content %}
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<section class="dashboard-section py-4">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="dashboard-title display-5 fw-bold text-primary">Панель вимірювань</h1>
+                <p class="lead text-muted">Ласкаво просимо! Тут ви можете додавати та переглядати вимірювання вашої дитини.</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-sm measurement-card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Додати нове вимірювання</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {# This form would typically be a Django form passed from your view #}
+                        {# For example: <form method="post" action="{% url 'add_measurement' %}"> #}
+                        <form method="post" action="#"> {# Replace # with your Django URL for adding measurement #}
+                            {% csrf_token %}
+
+                            {# Placeholder for Django form non-field errors or general messages #}
+                            {# {{ form.non_field_errors }} #}
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="measurement_date" name="measurement_date" placeholder="Дата вимірювання" required value="{{ form.measurement_date.value|default_if_none:'' }}">
+                                        <label for="measurement_date">Дата вимірювання</label>
+                                        {# {{ form.measurement_date.errors }} #}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="0.01" class="form-control" id="weight" name="weight" placeholder="Вага (кг)" required value="{{ form.weight.value|default_if_none:'' }}">
+                                        <label for="weight">Вага (кг)</label>
+                                        {# {{ form.weight.errors }} #}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="0.1" class="form-control" id="height" name="height" placeholder="Зріст/Довжина (см)" required value="{{ form.height.value|default_if_none:'' }}">
+                                        <label for="height">Зріст/Довжина (см)</label>
+                                        {# {{ form.height.errors }} #}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="number" step="0.1" class="form-control" id="head_circumference" name="head_circumference" placeholder="Обхват голови (см)" value="{{ form.head_circumference.value|default_if_none:'' }}">
+                                        <label for="head_circumference">Обхват голови (см)</label>
+                                        {# {{ form.head_circumference.errors }} #}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="notes" name="notes" placeholder="Примітки" style="height: 100px">{{ form.notes.value|default_if_none:'' }}</textarea>
+                                        <label for="notes">Примітки (необов'язково)</label>
+                                        {# {{ form.notes.errors }} #}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if form.errors %}
+                                <div class="alert alert-danger mt-3">
+                                    Будь ласка, виправте помилки вище.
+                                </div>
+                            {% endif %}
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">
+                                    <i class="fas fa-save me-2"></i>Зберегти вимірювання
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-3 text-secondary"><i class="fas fa-history me-2"></i>Історія вимірювань</h3>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% if measurements %}
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Дата</th>
+                                            <th>Вага (кг)</th>
+                                            <th>Зріст (см)</th>
+                                            <th>Обхват голови (см)</th>
+                                            <th>Примітки</th>
+                                            <th>Дії</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for measurement in measurements %}
+                                        <tr>
+                                            <td>{{ measurement.date|date:"d.m.Y" }}</td>
+                                            <td>{{ measurement.weight }}</td>
+                                            <td>{{ measurement.height }}</td>
+                                            <td>{{ measurement.head_circumference|default_if_none:"-" }}</td>
+                                            <td>{{ measurement.notes|truncatewords:10|default_if_none:"-" }}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary me-1 rounded-pill"><i class="fas fa-edit"></i></a> {# URL to edit #}
+                                                <a href="#" class="btn btn-sm btn-outline-danger rounded-pill"><i class="fas fa-trash"></i></a> {# URL to delete #}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-center text-muted fst-italic mt-3">Ще немає збережених вимірювань. Додайте перше!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

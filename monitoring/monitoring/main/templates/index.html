@@ -25,11 +25,20 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Головна</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Панель</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Додати запис</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Звіти</a></li>
+                        
+                        {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Панель</a></li> {# Assuming you have a 'dashboard' URL #}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'add_measurement' %}">Додати запис</a></li> {# Assuming you have an 'add_measurement' URL #}
+                            <li class="nav-item"><a class="nav-link" href="#">Звіти</a></li> {# Replace # with your 'reports' URL if available #}
+                        {% endif %}
+                        
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">Про нас</a></li>
-                        <li class="nav-item"><a class="btn btn-primary btn-sm ms-lg-2" href="{% url 'login' %}">Увійти</a></li>
+                        
+                        {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="btn btn-outline-secondary btn-sm ms-lg-2 rounded-pill" href="{% url 'logout' %}">Вийти</a></li> {# Assuming 'logout' URL #}
+                        {% else %}
+                            <li class="nav-item"><a class="btn btn-primary btn-sm ms-lg-2 rounded-pill" href="{% url 'login' %}">Увійти</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -40,8 +49,7 @@
     {% block content %}{% endblock content %}
     </main>  
 
-
-    <footer class="bg-dark text-white text-center py-4 mt-5">
+    <footer class="bg-dark text-white text-center py-4 mt-auto"> {# Changed mt-5 to mt-auto for better footer sticking #}
         <div class="container">
             <p class="mb-1">&copy; <span id="year"></span> KidStats. Всі права захищено.</p>
             <p class="mb-0 small">Створено з ❤️, щоб допомогти відстежувати розвиток вашої дитини.</p>
@@ -52,6 +60,6 @@
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
+    {% block scripts %}{% endblock scripts %} {# Added block scripts for page-specific JS #}
 </body>
 </html>
-

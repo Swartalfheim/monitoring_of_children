@@ -79,6 +79,11 @@ footer {
     width: 100%;
 }
 
+.form-check-input[type="checkbox"]{
+    border-color: #0d6efd;
+}
+
+
 @media (max-width: 991.98px) { 
     .navbar-nav .btn-sm {
         margin-top: 0.5rem;

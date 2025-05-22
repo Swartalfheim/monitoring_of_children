@@ -27,15 +27,14 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Головна</a></li>
                         
                         {% if user.is_authenticated %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Панель</a></li> {# Assuming you have a 'dashboard' URL #}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'add_measurement' %}">Додати запис</a></li> {# Assuming you have an 'add_measurement' URL #}
-                            <li class="nav-item"><a class="nav-link" href="#">Звіти</a></li> {# Replace # with your 'reports' URL if available #}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Панель</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Звіти</a></li>
                         {% endif %}
                         
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">Про нас</a></li>
                         
                         {% if user.is_authenticated %}
-                            <li class="nav-item"><a class="btn btn-outline-secondary btn-sm ms-lg-2 rounded-pill" href="{% url 'logout' %}">Вийти</a></li> {# Assuming 'logout' URL #}
+                            {#<li class="nav-item"><a class="btn btn-outline-secondary btn-sm ms-lg-2 rounded-pill" href="{% url 'logout' %}">Вийти</a></li>#}
                         {% else %}
                             <li class="nav-item"><a class="btn btn-primary btn-sm ms-lg-2 rounded-pill" href="{% url 'login' %}">Увійти</a></li>
                         {% endif %}

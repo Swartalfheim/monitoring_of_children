@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Випадковий графік віку та зросту</h2>
+    <div class="card p-4">
+        <img src="data:image/png;base64,{{ graph }}" class="img-fluid" alt="Графік віку та зросту">
+    </div>
+    <a href="javascript:history.back()" class="btn btn-secondary mt-4">Назад</a>
+</div>
+{% endblock %}

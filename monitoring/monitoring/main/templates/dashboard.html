@@ -186,6 +186,9 @@
                                             <td>{{ ditina.get_region_display }}</td>
                                             <td>{% if ditina.pryimaie_gormony %}Так{% else %}Ні{% endif %}</td>
                                             <td>
+                                                <a href="{% url 'random_graph' ditina.id %}" class="btn btn-sm btn-outline-success rounded-pill" title="Показати графік">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </a>
                                                 <a href="{% url 'edit_ditina' ditina.id %}" class="btn btn-sm btn-outline-primary me-1 rounded-pill" title="Редагувати"><i class="fas fa-edit"></i></a>
                                                 <form method="post" action="{% url 'delete_ditina' ditina.id %}" style="display:inline;">
                                                     {% csrf_token %}

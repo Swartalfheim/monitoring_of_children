@@ -3,11 +3,11 @@ from django.db import models
 
 class Ditina(models.Model):
     REGION_CHOICES = [
-        ('KYIV', 'Київ'),
-        ('LVIV', 'Львів'),
-        ('ODS', 'Одеса'),
-        ('KHR', 'Харків'),
-        ('DNI', 'Дніпро'),
+        ('UKR', 'Україна'),
+        ('FR', 'Фрнція'),
+        ('TU', 'Туреччина'),
+        ('JA', 'Японія'),
+        ('USA', 'США'),
     ]
 
     imya = models.CharField(max_length=100, verbose_name="Ім'я")

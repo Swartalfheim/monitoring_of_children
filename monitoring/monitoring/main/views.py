@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ditina
 from .forms import DitinaForm
+from .views_graph import random_graph
 
 #@login_required
 def dashboard_page_view(request):

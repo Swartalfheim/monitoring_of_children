@@ -38,3 +38,30 @@ def register_page_view(request):
 
 def login_page_view(requset):
     return render(requset, 'login.html')
+
+def edit_ditina_view(request, ditina_id):
+    ditina = Ditina.objects.get(id=ditina_id)
+    if request.method == 'POST':
+        form = DitinaForm(request.POST, instance=ditina)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Інформацію про дитину оновлено!')
+            return redirect('dashboard')
+    else:
+        form = DitinaForm(instance=ditina)
+    dity_list = Ditina.objects.all()
+    context = {
+        'form': form,
+        'dity_list': dity_list,
+        'edit_mode': True,
+        'edit_id': ditina_id,
+    }
+    return render(request, 'dashboard.html', context)
+
+def delete_ditina_view(request, ditina_id):
+    ditina = Ditina.objects.get(id=ditina_id)
+    if request.method == 'POST':
+        ditina.delete()
+        messages.success(request, 'Запис про дитину видалено!')
+        return redirect('dashboard')
+    return redirect('dashboard')

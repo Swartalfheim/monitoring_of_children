@@ -14,15 +14,11 @@
                     KidStats — це зручний і безпечний спосіб зберігати, візуалізувати та аналізувати дані вимірювань дітей.
                 </p>
                 <div>
-                    {# Button 1: "Додати нове вимірювання" #}
-                    {# If user is authenticated, link to '#', else link to registration page #}
-                    <a href="{% if user.is_authenticated %}#{% else %}{% url 'login' %}{% endif %}" class="btn btn-primary btn-lg me-md-2 mb-2 mb-md-0 rounded-pill">
+                    <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-primary btn-lg me-md-2 mb-2 mb-md-0 rounded-pill">
                         <i class="fas fa-plus-circle me-2"></i>Додати нове вимірювання
                     </a>
                     
-                    {# Button 2: "Перейти до панелі" #}
-                    {# If user is authenticated, link to '#', else link to registration page #}
-                    <a href="{% if user.is_authenticated %}#{% else %}{% url 'login' %}{% endif %}" class="btn btn-secondary btn-lg rounded-pill">
+                    <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-secondary btn-lg rounded-pill">
                         <i class="fas fa-tachometer-alt me-2"></i>Перейти до панелі
                     </a>
                 </div>

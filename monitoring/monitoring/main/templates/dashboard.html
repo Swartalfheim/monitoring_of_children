@@ -33,7 +33,7 @@
                         <h4 class="mb-0"><i class="fas fa-child me-2"></i>Додати інформацію про дитину</h4>
                     </div>
                     <div class="card-body p-4">
-                        <form method="post" action="{% url 'dashboard' %}">
+                        <form method="post" action="{% if edit_mode %}{% url 'edit_ditina' edit_id %}{% else %}{% url 'dashboard' %}{% endif %}">
                             {% csrf_token %}
 
                             {% if form.non_field_errors %}
@@ -144,8 +144,11 @@
 
                             <div class="d-grid mt-4">
                                 <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">
-                                    <i class="fas fa-save me-2"></i>Зберегти інформацію
+                                    <i class="fas fa-save me-2"></i>{% if edit_mode %}Оновити інформацію{% else %}Зберегти інформацію{% endif %}
                                 </button>
+                                {% if edit_mode %}
+                                    <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg rounded-pill mt-2">Скасувати</a>
+                                {% endif %}
                             </div>
                         </form>
                     </div>
@@ -183,8 +186,11 @@
                                             <td>{{ ditina.get_region_display }}</td>
                                             <td>{% if ditina.pryimaie_gormony %}Так{% else %}Ні{% endif %}</td>
                                             <td>
-                                                <a href="#" class="btn btn-sm btn-outline-primary me-1 rounded-pill" title="Редагувати"><i class="fas fa-edit"></i></a>
-                                                <a href="#" class="btn btn-sm btn-outline-danger rounded-pill" title="Видалити"><i class="fas fa-trash"></i></a>
+                                                <a href="{% url 'edit_ditina' ditina.id %}" class="btn btn-sm btn-outline-primary me-1 rounded-pill" title="Редагувати"><i class="fas fa-edit"></i></a>
+                                                <form method="post" action="{% url 'delete_ditina' ditina.id %}" style="display:inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Видалити" onclick="return confirm('Ви впевнені, що хочете видалити цей запис?');"><i class="fas fa-trash"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                         {% endfor %}

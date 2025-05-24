@@ -72,4 +72,75 @@ def random_graph(request, ditina_id):
     )
     fig = go.Figure(data=data, layout=layout)
     graph_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
-    return render(request, 'random_graph.html', {'graph_html': mark_safe(graph_html)})
+
+    # AI health assumption logic - Improved (without gender distinction)
+    ai_message = ""
+    AVERAGE_GROWTH_RATES_UNISEX = {
+        '0-2': {'start_height': 50, 'growth_per_year': 25},
+        '3-12': {'start_height': 88, 'growth_per_year': 5.8},
+        '13-18': {'start_height': 140, 'growth_per_year': 6.5},
+    }
+    # Ensure all necessary components are available
+    if component_age is not None and component_height is not None:
+        # Convert age to a float for more accurate comparison (ages like 2.5 are possible)
+        try:
+            age_years = float(component_age)
+        except (ValueError, TypeError):
+            ai_message = "Некоректний формат віку. Будь ласка, введіть числове значення."
+            return render(request, 'random_graph.html', {'graph_html': mark_safe(graph_html), 'ai_message': mark_safe(ai_message)})
+
+        # Check for hormonal therapy first
+        if getattr(ditina, 'pryimaie_gormony', False):
+            ai_message += "<b>Увага:</b> Дитина приймає гормональні препарати. Це може суттєво впливати на ріст і розвиток. <b>Обов'язково проконсультуйтеся з лікарем</b> для індивідуальної оцінки та регулярного моніторингу.<br><br>"
+
+        # Calculate estimated average height based on age (without gender)
+        estimated_avg_height = 0
+        if 0 <= age_years <= 2:
+            # A very rough linear approximation for 0-2 years, starting from 50cm at birth
+            estimated_avg_height = AVERAGE_GROWTH_RATES_UNISEX['0-2']['start_height'] + (age_years * AVERAGE_GROWTH_RATES_UNISEX['0-2']['growth_per_year'])
+        elif 2 < age_years <= 12:
+            # Use start_height for 3 years, then add yearly growth
+            estimated_avg_height = AVERAGE_GROWTH_RATES_UNISEX['3-12']['start_height'] + ((age_years - 2) * AVERAGE_GROWTH_RATES_UNISEX['3-12']['growth_per_year'])
+        elif 12 < age_years <= 18:
+            # Use start_height for 13 years, then add yearly growth
+            estimated_avg_height = AVERAGE_GROWTH_RATES_UNISEX['13-18']['start_height'] + ((age_years - 12) * AVERAGE_GROWTH_RATES_UNISEX['13-18']['growth_per_year'])
+        else:
+            ai_message += "На жаль, наша система не розрахована на вік, що виходить за межі 0-18 років для аналізу зросту.<br>"
+            return render(request, 'random_graph.html', {'graph_html': mark_safe(graph_html), 'ai_message': mark_safe(ai_message)})
+
+        # Define thresholds for "below/above average" based on a typical standard deviation or percentile
+        HEIGHT_DEVIATION_THRESHOLD = 7 # cm, a generalized deviation
+
+        if estimated_avg_height > 0: # Only proceed if an estimated average height was calculated
+            if component_height < estimated_avg_height - HEIGHT_DEVIATION_THRESHOLD:
+                ai_message += (f"<b>Зріст нижче середнього</b> для дитини вашого віку "
+                               f"({component_height} см при {age_years} роках). "
+                               f"Розрахований середній зріст: приблизно {estimated_avg_height:.1f} см. "
+                               f"<b>Рекомендується звернутися до педіатра</b> для консультації та оцінки розвитку.")
+            elif component_height > estimated_avg_height + HEIGHT_DEVIATION_THRESHOLD:
+                ai_message += (f"<b>Зріст вище середнього</b> для дитини вашого віку "
+                               f"({component_height} см при {age_years} роках). "
+                               f"Розрахований середній зріст: приблизно {estimated_avg_height:.1f} см. "
+                               f"Це може бути індивідуальною особливістю, але варто <b>спостерігати за динамікою</b> зросту "
+                               f"та за потреби проконсультуватися з лікарем.")
+            else:
+                ai_message += (f"<b>Зріст у межах норми</b> для дитини вашого віку "
+                               f"({component_height} см при {age_years} роках). "
+                               f"Розрахований середній зріст: приблизно {estimated_avg_height:.1f} см.")
+        else:
+            ai_message += "На жаль, не вдалося розрахувати середній зріст для наданих даних.<br>"
+
+    else:
+        # Handle cases where essential data is missing
+        missing_data = []
+        if component_age is None:
+            missing_data.append("вік")
+        if component_height is None:
+            missing_data.append("зріст")
+
+        if missing_data:
+            ai_message = f"<b>Недостатньо даних для аналізу.</b> Будь ласка, введіть: {', '.join(missing_data)}."
+        else:
+            ai_message = "Недостатньо даних для аналізу (невідома причина)."
+
+    return render(request, 'random_graph.html', {'graph_html': mark_safe(graph_html), 'ai_message': mark_safe(ai_message)})

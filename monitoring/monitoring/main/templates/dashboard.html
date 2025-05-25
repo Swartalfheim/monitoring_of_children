@@ -173,6 +173,7 @@
                                             <th>Зріст (см)</th>
                                             <th>Регіон</th>
                                             <th>Приймає гормони</th>
+                                            <th>Дата створення</th>
                                             <th>Дії</th>
                                         </tr>
                                     </thead>
@@ -185,6 +186,7 @@
                                             <td>{{ ditina.zrist }}</td>
                                             <td>{{ ditina.get_region_display }}</td>
                                             <td>{% if ditina.pryimaie_gormony %}Так{% else %}Ні{% endif %}</td>
+                                            <td>{{ ditina.data_stvorennia|date:'d.m.Y H:i' }}</td>
                                             <td>
                                                 <a href="{% url 'random_graph' ditina.id %}" class="btn btn-sm btn-outline-success rounded-pill" title="Показати графік">
                                                     <i class="fas fa-chart-line"></i>

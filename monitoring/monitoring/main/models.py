@@ -26,3 +26,11 @@ class Ditina(models.Model):
 
     def __str__(self):
         return f"{self.prizvische} {self.imya}"
+
+"""
+__gte - >=
+__gt - >
+__lte - <=
+__lt - <
+
+"""
